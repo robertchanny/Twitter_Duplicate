@@ -62,7 +62,7 @@ module.exports = {
 			}
 
 			if (profile==null){
-				completion('Weird MongoDB error srry my bad', null);
+				completion('Weird MongoDB error sorry my bad', null);
 				return;
 			}
 
@@ -70,22 +70,18 @@ module.exports = {
 			return;
 		});
 		return;
+	},
+
+	update: function(id, params, completion){
+		Profile.findByIdAndUpdate(id, params, {new:true}, function(err, profile){
+			if(err){
+				completion(err.message, null);
+				return;
+			}
+			completion(null, profile.summary());
+			return;
+		});
+		return;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

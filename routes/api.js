@@ -32,7 +32,7 @@ router.get('/:resource', function(req, res, next){
 	}
 	controller.get(req.query, function(err, results){
 		if (err){
-			res.send(createErrorObject(err.message));
+			res.send(createErrorObject(err));
 			return;
 		}
 		res.send(createResultObject(results));
@@ -41,7 +41,24 @@ router.get('/:resource', function(req, res, next){
 	return;
 });
 
-
+router.get('/:resource/:id', function(req,res,next){
+	var resource = req.params.resource,
+		id = req.params.id,
+		controller = controllers[resource];
+	if (controller==null){
+		res.send(createErrorObject('Invalid resource'));
+		return;
+	}
+	controller.getById(id, function(err, results){
+		if (err){
+			res.send(createErrorObject(err));
+			return;
+		}
+		res.send(createResultObject(results));
+		return;
+	})
+	return;
+})
 
 router.post('/:resource', function(req, res, next){
 	var resource = req.params.resource;
@@ -53,7 +70,7 @@ router.post('/:resource', function(req, res, next){
 
 	controller.post(req.body, function(err, results){
 		if (err){
-			res.send(createErrorObject(err.message));
+			res.send(createErrorObject(err));
 			return;
 		}
 		res.send(createResultObject(results));

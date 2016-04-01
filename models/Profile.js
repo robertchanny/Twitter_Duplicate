@@ -5,7 +5,8 @@ var ProfileSchema = new mongoose.Schema({
 	lastName:{type:String, default:''},
 	email:{type:String, default:''},
 	password:{type:String, default:''},
-	timestamp:{type:Date, default:Date.now}
+	timestamp:{type:Date, default:Date.now},
+	following: {type:Array, default:[]}
 });
 
 ProfileSchema.methods.summary = function(){
@@ -13,6 +14,7 @@ ProfileSchema.methods.summary = function(){
 		firstName: this.firstName,
 		lastName: this.lastName,
 		email: this.email,
+		following:this.following,
 		timestamp: this.timestamp,
 		id: this._id
 	}

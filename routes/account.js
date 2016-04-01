@@ -76,4 +76,17 @@ router.post('/:resource', function(req, res, next){
 	}
 });
 
+router.put('/:id', function(req,res,next){
+	var id = req.params.id;
+	ProfileController.update(id, req.body, function(err, profile){
+		if(err){
+			res.send(createErrorObject(err));
+			return;
+		}
+		res.send(createResultObject(profile));
+		return;
+	})
+	return;
+});
+
 module.exports = router;
