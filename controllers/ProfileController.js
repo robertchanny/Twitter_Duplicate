@@ -1,4 +1,5 @@
-var Profile = require('../models/Profile');
+var Profile = require('../models/Profile'),
+	bcrypt = require('bcrypt');
 
 module.exports = {
 
@@ -20,13 +21,31 @@ module.exports = {
 		return;
 	},
 
+	//CREATE
 	register: function(params, completion){
+		var hashedPassword = bcrypt.hashSync(params['password'],10);
+		params['password'] = hashedPassword;
+
 		Profile.create(params, function(err, profile){
 			if (err){
 				completion(err, null);
 				return;
 			}
-			completion(null, profile.summary());
+			var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+			sendgrid.send({
+				to: profile.email,
+				from: 'robertchanny@gmail.com',
+				fromname: 'Ribber',
+				subject: 'WECOME TO MY APP',
+				text: 'This is the welcome message!'
+			}, function(err, json){
+				if(err){
+					completion(err,null);
+					return;
+				}
+				completion(null, profile.summary());
+				return;
+			});
 			return;
 		});
 		return;
@@ -44,7 +63,9 @@ module.exports = {
 				return;
 			}
 
-			if (profile.password != params.password){
+			var passwordCorrect = bcrypt.compareSync(params.password, profile.password); //second param is the hash - this returns a Boolean
+
+			if (!passwordCorrect){
 				completion('Invalid password', null);
 				return;
 			}
@@ -54,6 +75,7 @@ module.exports = {
 		return;
 	},
 
+	//SHOW
 	getById: function(params, completion){
 		Profile.findById(params, function(err, profile){
 			if (err){

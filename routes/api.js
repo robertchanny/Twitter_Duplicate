@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
 var express = require('express');
 var ProfileController = require('../controllers/ProfileController');
+var PostController = require('../controllers/PostController');
 var router = express.Router();
 var controllers = {
-	profile: ProfileController
+	profile: ProfileController,
+	post: PostController
 }
 
 function createErrorObject(msg){

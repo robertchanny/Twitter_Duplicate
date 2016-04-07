@@ -43,7 +43,11 @@
         <!--[if IE]>
             <script src="js/html5shiv.js"></script>
         <![endif]-->
-
+        <style>
+            h1, h2, h3, h4, h5 {
+                text-transform: none;
+            }
+        </style>
     </head>
     <body ng-app="Twitter" ng-controller="HomeController" ng-init="init()">
         <!-- navigation panel -->
@@ -53,7 +57,7 @@
                     <!-- logo -->
                     <div class="col-md-2 pull-left"><a class="logo-light" href="index.html"><img alt="" src="images/logo-white.png" class="logo" /></a><a class="logo-dark" href="index.html"><img alt="" src="images/logo-light.png" class="logo" /></a></div>
                     <!-- end logo -->
-                    
+                    <div ng-show="currentUser != null" class="col-md-2 pull-right"><a ng-click="logout()">Log Out</a></div>
                       
                     <!-- end main menu -->
                 </div>
@@ -119,23 +123,14 @@
 
                     <div class="col-md-8">
                         <h2>Post Feed</h2>
-                        <div style="margin-top:2%">
-                            <p class="lead">Here is the text of a Post, which we will be creating soon. It contains the content the user wrote in their post</p>
-                            <span style="float:left">Jake Greenstein</span><span style="float:right">January 1, 2016</span>
-                            <br/>
+                        <div ng-repeat="post in postFeed">
+                            <div style="margin-top:2%">
+                                <p class="lead"><% post.content %></p>
+                                <span style="float:left"><% post.posterFirstName %> <% post.posterLastName %></span><span style="float:right"><% post.timestamp | date : 'medium'  %></span>
+                                <br/>
+                            </div>
                         </div>
                         <hr/>
-                        <div style="margin-top:2%">
-                            <p class="lead">Here is the text of a Post, which we will be creating soon. It contains the content the user wrote in their post</p>
-                            <span style="float:left">Jake Greenstein</span><span style="float:right">January 1, 2016</span>
-                            <br/>
-                        </div>
-                        <hr/>
-                        <div style="margin-top:2%">
-                            <p class="lead">Here is the text of a Post, which we will be creating soon. It contains the content the user wrote in their post</p>
-                            <span style="float:left">Jake Greenstein</span><span style="float:right">January 1, 2016</span>
-                            <br/>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -149,8 +144,8 @@
                         <h2>Write a Post</h2>
                         <br/>
                         <div class="form-group no-margin-bottom">
-                            <textarea placeholder="Type your post here to share with followers" type="text" name="email" id="email" class="input-round big-input"></textarea>
-                            <button class="btn highlight-button-dark btn-small btn-round margin-five no-margin-right" type="submit">Post</button>
+                            <textarea ng-model="newPost.content" placeholder="Type your post here to share with followers" type="text" name="email" id="email" class="input-round big-input"></textarea>
+                            <button ng-click="submitPost()" class="btn highlight-button-dark btn-small btn-round margin-five no-margin-right" type="submit">Post</button>
                         </div>
                     </div>
 

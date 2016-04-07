@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+//The only thing needed here is the ProfileController
 var express = require('express');
 var ProfileController = require('../controllers/ProfileController');
 var router = express.Router();
@@ -21,6 +21,10 @@ function createResultObject(results){
 
 router.get('/:resource', function(req, res, next){
 	var resource = req.params.resource;
+	if (resource == 'logout'){
+		req.session.reset();
+		res.redirect('/');
+	}
 	if (resource == 'currentuser'){
 		if (!req.session){
 			res.send(createErrorObject('User Not Logged In.'));
